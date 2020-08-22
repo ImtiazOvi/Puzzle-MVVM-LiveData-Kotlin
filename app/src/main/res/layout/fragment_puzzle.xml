@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="puzzle"
+            type="com.practice.wordpuzzle.FragmentPuzzle" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity">
+
+        <EditText
+            android:id="@+id/puzzle_word"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            app:layout_constraintEnd_toStartOf="@+id/txt_puzzel_2"
+            app:layout_constraintStart_toEndOf="@+id/txt_puzzel_1st"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txt_puzzel_1st"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:text="TextView"
+            app:layout_constraintBottom_toBottomOf="@+id/puzzle_word"
+            app:layout_constraintEnd_toStartOf="@+id/puzzle_word"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/puzzle_word" />
+
+        <TextView
+            android:id="@+id/txt_puzzel_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="28dp"
+            android:text="TextView"
+            app:layout_constraintBottom_toBottomOf="@+id/puzzle_word"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/puzzle_word"
+            app:layout_constraintTop_toTopOf="@+id/puzzle_word" />
+
+        <Button
+            android:id="@+id/btn_skip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="48dp"
+            android:text="Skip"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_score" />
+
+        <Button
+            android:id="@+id/btn_ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="28dp"
+            android:text="Ok"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_skip"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/btn_skip" />
+
+        <TextView
+            android:id="@+id/txt_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:text="0"
+            android:textSize="22sp"
+            android:textColor="#ff22"
+            app:layout_constraintEnd_toEndOf="@+id/txt_puzzel_2"
+            app:layout_constraintStart_toStartOf="@+id/txt_puzzel_1st"
+            app:layout_constraintTop_toBottomOf="@+id/txt_puzzel_1st" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
