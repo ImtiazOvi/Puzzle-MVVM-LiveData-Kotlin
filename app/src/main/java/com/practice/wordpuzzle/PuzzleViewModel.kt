@@ -1,16 +1,21 @@
 package com.practice.wordpuzzle
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class PuzzleViewModel: ViewModel(){
-    var score = 0
-    var word:WordPuzzleData? = null
+    val score = MutableLiveData<Int>()
+    var word = MutableLiveData<WordPuzzleData>()
+    val gameFinish = MutableLiveData<Boolean>()
+
     lateinit var words: ArrayList<WordPuzzleData>
 
     init {
         loadData();
         nextWord();
+        score.value = 0
+        gameFinish.value = false
     }
 
     private fun loadData(){
@@ -26,23 +31,26 @@ class PuzzleViewModel: ViewModel(){
 
      fun nextWord(){
         if (words.isEmpty()){
-           // gameOver()
+            gameFinish.value = true
         }else{
-            word = words.removeAt(0)
+            word.value = words.removeAt(0)
         }
     }
 
     fun onSkip(){
-        score--
+        score.value = (score.value)?.minus(1)
         nextWord()
     }
     fun onWrongAnswer(){
-        score--
+        score.value = (score.value)?.minus(1)
         nextWord()
     }
     fun onRightAnswer(){
-        score++
+        score.value = (score.value)?.plus(1)
         nextWord()
+    }
+    fun onGameOver(){
+        gameFinish.value = false
     }
 
 }

@@ -5,8 +5,11 @@ import android.provider.UserDictionary
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.practice.wordpuzzle.databinding.FragmentPuzzleBinding
@@ -23,21 +26,32 @@ class FragmentPuzzle : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_puzzle, container, false)
-
         puzzleViewModel = ViewModelProvider(this).get(PuzzleViewModel::class.java)
+        // bind lifeCycle owner
+        binding.lifecycleOwner = this
+
+        puzzleViewModel.word.observe(viewLifecycleOwner, Observer {
+            binding.txtPuzzel1st.text = puzzleViewModel.word.value?.question_gap_1
+            binding.txtPuzzel2.text = puzzleViewModel.word.value?.question_gap_2
+        })
+        // observer
+        puzzleViewModel.score.observe(viewLifecycleOwner, Observer {
+            binding.txtScore.text = it?.toString()
+
+        })
+        puzzleViewModel.gameFinish.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                gameOver()
+            }
+        })
+
         binding.btnOk.setOnClickListener {
             checkAnswer()
-            updateScore()
-            updateWord()
         }
 
         binding.btnSkip.setOnClickListener {
             puzzleViewModel.onSkip()
-            updateScore()
-            updateWord()
         }
-        updateScore()
-        updateWord()
         return binding.root
     }
 
@@ -47,29 +61,23 @@ class FragmentPuzzle : Fragment() {
 
 
     private fun gameOver() {
-        val action = FragmentPuzzleDirections.actionFragmentPuzzleToFragmentGameOver(puzzleViewModel.score)
+        val action = FragmentPuzzleDirections.actionFragmentPuzzleToFragmentGameOver(
+            puzzleViewModel.score.value ?: 0
+        )
         findNavController().navigate(action)
-    }
+        puzzleViewModel.onGameOver()
+     }
 
-    fun updateWord() {
-        binding.txtPuzzel1st.text = puzzleViewModel.word?.question_gap_1
-        binding.txtPuzzel2.text = puzzleViewModel.word?.question_gap_2
-    }
-
-    fun updateScore() {
-        binding.txtScore.text = puzzleViewModel.score?.toString()
-    }
 
     fun checkAnswer() {
-        if (puzzle_word.text.toString().toUpperCase() == puzzleViewModel.word?.correctAnswer) {
+        if (puzzle_word.text.toString().toUpperCase() == puzzleViewModel.word.value?.correctAnswer
+        ) {
             puzzle_word.text = null
             puzzleViewModel.onRightAnswer()
-            puzzleViewModel.nextWord()
         } else {
             puzzle_word.text = null
             puzzleViewModel.onWrongAnswer()
-            puzzleViewModel.nextWord()
-        }
+         }
     }
 
 
