@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.practice.wordpuzzle.databinding.FragmentGameOverBinding
 
@@ -13,7 +15,8 @@ import com.practice.wordpuzzle.databinding.FragmentGameOverBinding
 class FragmentGameOver : Fragment() {
 
     lateinit var binding: FragmentGameOverBinding
-
+    lateinit var gameOverViewModel: GameOverViewModel
+    lateinit var scoreViewModelFactory: ScoreViewModelFactory
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -30,7 +33,11 @@ class FragmentGameOver : Fragment() {
         super.onActivityCreated(savedInstanceState)
         arguments?.let {
             val args = FragmentGameOverArgs.fromBundle(it)
-            binding.txtScoreValue.text = args.score.toString()
+            scoreViewModelFactory = ScoreViewModelFactory(args.score)
+            gameOverViewModel = ViewModelProvider(this, scoreViewModelFactory).get(GameOverViewModel::class.java)
+            gameOverViewModel.score.observe(viewLifecycleOwner, Observer {
+                binding.txtScoreValue.text = it.toString()
+            })
         }
     }
 
